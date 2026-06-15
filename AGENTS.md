@@ -111,3 +111,20 @@ When you want durable fixes (not one-off chat advice):
 - Do not install Trunk-managed linters globally; versions live in `.trunk/trunk.yaml`
 - Commit **`pnpm-lock.yaml`**
 - After `pnpm install`, Trunk is under `node_modules/.bin`; pin is in `.trunk/trunk.yaml` (`cli.version`). Run `pnpm exec trunk install` if formatters/linters are missing
+
+## Learned User Preferences
+
+- Prefer simple, minimal implementations; avoid over-engineering when scoping features or fixes.
+- Use `LIGHTDASH_URL` for the Lightdash instance origin (aligned with Lightdash CLI); do not reintroduce `LIGHTDASH_SITE_URL`.
+- Remove deprecated env aliases outright when consolidating names rather than keeping long-term fallbacks.
+- When implementing from an attached plan, do not edit the plan file itself.
+
+## Learned Workspace Facts
+
+- This repo is `lightdash-mcp-demo`: a minimal Lightdash OAuth MCP demo (evolved from the typescript-template scaffold).
+- Packages: `@lightdash-mcp-demo/server` only (`packages/mcp-server`, Express + MCP Streamable HTTP; Lightdash user Zod schemas live in `src/lightdash/lightdash-user.ts`).
+- Only `LIGHTDASH_URL` is required to start `pnpm dev`; OAuth client ID/secret belong in MCP client config (e.g. Cursor), not server runtime.
+- `pnpm dev` loads `.env.local` then `.env` from the repo root via dotenv in `packages/mcp-server/src/config.ts` (not `tsx --env-file`, which fails if a file is missing).
+- `LIGHTDASH_OAUTH_CLIENT_ID` and `LIGHTDASH_OAUTH_CLIENT_SECRET` are not used by MCP server runtime; OAuth is completed by MCP clients (e.g. Cursor), not by `curl`.
+- When using ngrok with Cursor, set `MCP_PUBLIC_URL` to the ngrok HTTPS origin (no trailing slash) and restart the server; if unset, `WWW-Authenticate` points at localhost and remote OAuth discovery fails.
+- `POST /mcp` without a bearer token returns HTTP 401 with a `WWW-Authenticate` header plus JSON `{ "error": "Unauthorized" }`; browser login happens on Lightdash, opened by the MCP client.
