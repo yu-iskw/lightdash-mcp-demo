@@ -1,5 +1,6 @@
-import { config as loadDotenv } from 'dotenv';
 import path from 'node:path';
+
+import { config as loadDotenv } from 'dotenv';
 import { z } from 'zod';
 
 const repoRoot = path.resolve(__dirname, '../../..');
