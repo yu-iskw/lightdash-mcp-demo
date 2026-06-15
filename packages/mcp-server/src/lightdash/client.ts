@@ -29,14 +29,11 @@ export class LightdashClient {
   ) {}
 
   async getAuthenticatedUser(accessToken: string): Promise<LightdashUser> {
-    console.log('Fetching authenticated user from:', `${this.siteUrl}/api/v1/user`);
     const response = await this.fetchFn(`${this.siteUrl}/api/v1/user`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
-    console.log('Response status:', response.status, 'ok:', response.ok);
 
     if (response.status === 401) {
       throw new LightdashAuthError();
@@ -47,14 +44,12 @@ export class LightdashClient {
     }
 
     const payload: unknown = await response.json();
-    console.log('Parsed response:', payload);
-    try {
-      const parsed = apiGetAuthenticatedUserResponseSchema.parse(payload);
-      console.log('Validation passed, returning user');
-      return parsed.results;
-    } catch (error) {
-      console.error('Validation error:', error);
-      throw new LightdashApiError(500, `Invalid response from Lightdash API: ${String(error)}`);
+    const parsed = apiGetAuthenticatedUserResponseSchema.safeParse(payload);
+
+    if (!parsed.success) {
+      throw new LightdashApiError(500, 'Invalid response from Lightdash API');
     }
+
+    return parsed.data.results;
   }
 }

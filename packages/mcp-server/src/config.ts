@@ -15,8 +15,6 @@ function normalizeUrl(url: string): string {
 const configSchema = z
   .object({
     LIGHTDASH_URL: z.string().min(1, 'LIGHTDASH_URL is required'),
-    LIGHTDASH_OAUTH_CLIENT_ID: z.string().optional(),
-    LIGHTDASH_OAUTH_CLIENT_SECRET: z.string().optional(),
     MCP_SERVER_PORT: z.coerce.number().int().positive().default(3100),
     MCP_PUBLIC_URL: z
       .string()
@@ -32,8 +30,6 @@ const configSchema = z
   })
   .transform((input) => ({
     lightdashUrl: normalizeUrl(input.LIGHTDASH_URL),
-    LIGHTDASH_OAUTH_CLIENT_ID: input.LIGHTDASH_OAUTH_CLIENT_ID,
-    LIGHTDASH_OAUTH_CLIENT_SECRET: input.LIGHTDASH_OAUTH_CLIENT_SECRET,
     MCP_SERVER_PORT: input.MCP_SERVER_PORT,
     MCP_PUBLIC_URL: input.MCP_PUBLIC_URL,
   }));
@@ -43,8 +39,6 @@ export type AppConfig = z.infer<typeof configSchema>;
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   return configSchema.parse({
     LIGHTDASH_URL: env.LIGHTDASH_URL,
-    LIGHTDASH_OAUTH_CLIENT_ID: env.LIGHTDASH_OAUTH_CLIENT_ID,
-    LIGHTDASH_OAUTH_CLIENT_SECRET: env.LIGHTDASH_OAUTH_CLIENT_SECRET,
     MCP_SERVER_PORT: env.MCP_SERVER_PORT,
     MCP_PUBLIC_URL: env.MCP_PUBLIC_URL,
   });

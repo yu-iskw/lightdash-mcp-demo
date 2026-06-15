@@ -1,20 +1,30 @@
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import express, { json } from 'express';
+import { rateLimit } from 'express-rate-limit';
 
 import { loadConfig } from './config';
 import { LightdashClient } from './lightdash/client';
 import { buildOAuthProtectedResourceMetadata } from './lightdash/oauth-metadata';
 import { createMcpServer } from './mcp/create-server';
 import { createRequireBearerMiddleware } from './middleware/require-bearer';
-import { registerHealthRoute } from './routes/health';
 
 function main(): void {
   const config = loadConfig();
   const app = express();
   const lightdashClient = new LightdashClient(config.lightdashUrl);
   const requireBearer = createRequireBearerMiddleware(config);
+  const apiRateLimiter = rateLimit({
+    windowMs: 60_000,
+    max: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
 
-  registerHealthRoute(app);
+  app.use(apiRateLimiter);
+
+  app.get('/health', (_req, res) => {
+    res.json({ status: 'ok' });
+  });
 
   app.get('/.well-known/oauth-protected-resource', (_req, res) => {
     res.json(buildOAuthProtectedResourceMetadata(config));
@@ -30,6 +40,11 @@ function main(): void {
       sessionIdGenerator: undefined,
     });
 
+    res.once('close', () => {
+      void transport.close();
+      void mcpServer.close();
+    });
+
     try {
       await mcpServer.connect(transport);
       await transport.handleRequest(req, res, req.body);
@@ -42,11 +57,6 @@ function main(): void {
           id: null,
         });
       }
-    } finally {
-      res.on('close', () => {
-        void transport.close();
-        void mcpServer.close();
-      });
     }
   });
 

@@ -5,11 +5,6 @@ import { LightdashApiError, LightdashAuthError } from '../lightdash/client';
 import type { LightdashClient } from '../lightdash/client';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 
-
-type ToolExtra = {
-  authInfo?: AuthInfo;
-};
-
 export function createMcpServer(lightdashClient: LightdashClient): McpServer {
   const server = new McpServer({
     name: 'lightdash-mcp-demo',
@@ -29,18 +24,9 @@ export function createMcpServer(lightdashClient: LightdashClient): McpServer {
         openWorldHint: false,
       },
     },
-    async (_args, extra: ToolExtra) => {
-      const token = extra.authInfo?.token;
-
-      if (!token) {
-        return {
-          content: [{ type: 'text' as const, text: 'Missing bearer token' }],
-          isError: true,
-        };
-      }
-
+    async (_args, extra: { authInfo?: AuthInfo }) => {
       try {
-        const user = await lightdashClient.getAuthenticatedUser(token);
+        const user = await lightdashClient.getAuthenticatedUser(extra.authInfo!.token);
 
         return {
           content: [
