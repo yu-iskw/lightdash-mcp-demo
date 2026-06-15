@@ -60,17 +60,8 @@ importers:
         specifier: ^4.1.3
         version: 4.1.3(@types/node@25.9.2)(@vitest/coverage-v8@4.1.3)(vite@8.0.16(@types/node@25.9.2)(esbuild@0.28.1)(jiti@2.6.1)(tsx@4.22.4)(yaml@2.8.3))
 
-  packages/common:
-    dependencies:
-      zod:
-        specifier: ^4.1.12
-        version: 4.3.6
-
   packages/mcp-server:
     dependencies:
-      '@lightdash-mcp-demo/common':
-        specifier: workspace:*
-        version: link:../common
       '@modelcontextprotocol/sdk':
         specifier: 1.29.0
         version: 1.29.0(zod@4.3.6)

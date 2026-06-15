@@ -122,15 +122,13 @@ Missing or invalid bearer on `POST /mcp` returns **401** with:
 ```text
 lightdash-mcp-demo/
 ├── packages/
-│   ├── common/                 # Shared Zod schemas and types (Lightdash user)
-│   └── mcp-server/             # Express + MCP SDK demo server
+│   └── mcp-server/             # Express + MCP SDK demo server (@lightdash-mcp-demo/server)
 │       └── src/
-│           ├── index.ts        # HTTP app, /mcp transport
+│           ├── index.ts        # HTTP app, /mcp transport, /health
 │           ├── config.ts       # Env loading and validation
-│           ├── lightdash/      # API client + OAuth metadata helpers
+│           ├── lightdash/      # API client, OAuth metadata, user schemas
 │           ├── mcp/            # MCP tool registration
-│           ├── middleware/     # Bearer token gate
-│           └── routes/         # /health
+│           └── middleware/     # Bearer token gate
 ├── dev/
 │   └── call-mcp-tool.sh        # Local curl helper (manual token)
 ├── docs/
@@ -144,7 +142,7 @@ lightdash-mcp-demo/
 | -------------------- | ------------------------------------------------------------- |
 | `pnpm install`       | Install workspace dependencies                                |
 | `pnpm dev`           | Run MCP server with hot reload (`@lightdash-mcp-demo/server`) |
-| `pnpm build`         | Compile all packages (`tsc`)                                  |
+| `pnpm build`         | Compile the MCP server (`tsc`)                                |
 | `pnpm test`          | Run Vitest across the workspace                               |
 | `pnpm lint:eslint`   | ESLint                                                        |
 | `pnpm format:eslint` | ESLint with `--fix`                                           |

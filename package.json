@@ -8,7 +8,7 @@
   "author": "",
   "scripts": {
     "dev": "pnpm --filter @lightdash-mcp-demo/server dev",
-    "build": "pnpm --recursive build",
+    "build": "pnpm --filter @lightdash-mcp-demo/server build",
     "trunk": "trunk",
     "format": "pnpm format:trunk",
     "format:all": "pnpm format:trunk-all",
@@ -26,7 +26,6 @@
     "knip": "knip",
     "codeql:local": "bash dev/codeql.sh",
     "test": "vitest run",
-    "postinstall": "pnpm --filter @lightdash-mcp-demo/common build",
     "coverage": "vitest run --coverage",
     "coverage:watch": "vitest --coverage"
   },

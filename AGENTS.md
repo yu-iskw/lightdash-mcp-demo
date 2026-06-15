@@ -122,7 +122,7 @@ When you want durable fixes (not one-off chat advice):
 ## Learned Workspace Facts
 
 - This repo is `lightdash-mcp-demo`: a minimal Lightdash OAuth MCP demo (evolved from the typescript-template scaffold).
-- Packages: `@lightdash-mcp-demo/common` (shared Lightdash types/schemas) and `@lightdash-mcp-demo/server` (`packages/mcp-server`, Express + MCP Streamable HTTP).
+- Packages: `@lightdash-mcp-demo/server` only (`packages/mcp-server`, Express + MCP Streamable HTTP; Lightdash user Zod schemas live in `src/lightdash/lightdash-user.ts`).
 - Only `LIGHTDASH_URL` is required to start `pnpm dev`; OAuth client ID/secret belong in MCP client config (e.g. Cursor), not server runtime.
 - `pnpm dev` loads `.env.local` then `.env` from the repo root via dotenv in `packages/mcp-server/src/config.ts` (not `tsx --env-file`, which fails if a file is missing).
 - `LIGHTDASH_OAUTH_CLIENT_ID` and `LIGHTDASH_OAUTH_CLIENT_SECRET` are not used by MCP server runtime; OAuth is completed by MCP clients (e.g. Cursor), not by `curl`.

@@ -1,7 +1,4 @@
-import {
-  apiGetAuthenticatedUserResponseSchema,
-  type LightdashUser,
-} from '@lightdash-mcp-demo/common';
+import { apiGetAuthenticatedUserResponseSchema, type LightdashUser } from './lightdash-user';
 
 export class LightdashAuthError extends Error {
   constructor(message = 'Lightdash rejected token (expired or revoked)') {

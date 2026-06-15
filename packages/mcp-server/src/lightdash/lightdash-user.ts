@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const lightdashUserSchema = z.object({
+const lightdashUserSchema = z.object({
   userUuid: z.string(),
   firstName: z.string(),
   lastName: z.string(),
@@ -18,4 +18,3 @@ export const apiGetAuthenticatedUserResponseSchema = z.object({
 });
 
 export type LightdashUser = z.infer<typeof lightdashUserSchema>;
-export type ApiGetAuthenticatedUserResponse = z.infer<typeof apiGetAuthenticatedUserResponseSchema>;

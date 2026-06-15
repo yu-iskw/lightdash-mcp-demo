@@ -419,30 +419,27 @@ Token lifetime defaults: **1 hour** access, **14 days** refresh (`AUTH_OAUTH_SER
 
 Current state of this repository (`yu-iskw/lightdash-mcp-demo`):
 
-- pnpm monorepo template (Node ? 24, pnpm 11)
-- Existing package: `packages/common` (`@typescript-template/common`CP server package yet � to be added per layout below
+- pnpm workspace with a single package: `packages/mcp-server` (`@lightdash-mcp-demo/server`)
 
-### 8.2 Proposed package layout
+### 8.2 Package layout
 
 ```text
 lightdash-mcp-demo/
-??? packages/
-?   ??? common/                    # existing � add Lightdash API types
-?   ?   ??? src/
-?   ?       ??? lightdashUser.ts   # ApiGetAuthenticatedUserResponse types
-?   ??? mcp-server/                # NEW
-?       ??? package.json           # name: @lightdash-mcp-demo/server
-?       ??? tsconfig.json
-?       ??? src/
-?           ??? index.ts           # Express app entry, listen()
-?           ??? config.ts          # zod-validated env
-?           ??? lightdash/
-?           ?   ??? client.ts      # getAuthenticatedUser(accessToken)
-?           ?   ??? oauthMetadata.ts
-?           ??? mcp/
-?           ?   ??? createServer.ts
-?           ?   ??? tools/
-?           ?       ??e with run instructions
+└── packages/
+    └── mcp-server/                # @lightdash-mcp-demo/server
+        ├── package.json
+        ├── tsconfig.json
+        └── src/
+            ├── index.ts           # Express app entry, listen()
+            ├── config.ts          # zod-validated env
+            ├── lightdash/
+            │   ├── client.ts      # getAuthenticatedUser(accessToken)
+            │   ├── lightdash-user.ts
+            │   └── oauth-metadata.ts
+            ├── mcp/
+            │   └── create-server.ts
+            └── middleware/
+                └── require-bearer.ts
 ```
 
 ### 8.3 Dependencies (implementation)
