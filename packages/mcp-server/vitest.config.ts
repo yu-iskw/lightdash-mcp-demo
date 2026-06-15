@@ -2,7 +2,7 @@ import { defineProject } from 'vitest/config';
 
 export default defineProject({
   test: {
-    name: '@lightdash-mcp-demo/common',
+    name: '@lightdash-mcp-demo/server',
     include: ['src/**/*.{test,spec}.ts'],
     exclude: ['dist/**'],
   },

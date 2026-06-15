@@ -1,7 +1,7 @@
 {
-  "name": "@typescript-template/common",
+  "name": "@lightdash-mcp-demo/common",
   "version": "1.0.0",
-  "description": "Common utilities and types for the TypeScript template project.",
+  "description": "Shared Lightdash API types for the MCP demo.",
   "keywords": [],
   "license": "Apache-2.0",
   "author": "",
@@ -9,5 +9,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
+  },
+  "dependencies": {
+    "zod": "^4.1.12"
   }
 }

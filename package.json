@@ -1,12 +1,13 @@
 {
-  "name": "typescript-template",
+  "name": "lightdash-mcp-demo",
   "version": "1.0.0",
   "private": true,
-  "description": "",
+  "description": "Minimal Lightdash OAuth MCP demo server",
   "keywords": [],
   "license": "Apache-2.0",
   "author": "",
   "scripts": {
+    "dev": "pnpm --filter @lightdash-mcp-demo/server dev",
     "build": "pnpm --recursive build",
     "trunk": "trunk",
     "format": "pnpm format:trunk",

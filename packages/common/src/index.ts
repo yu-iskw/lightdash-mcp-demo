@@ -1,3 +1,6 @@
-export function greet(name: string): string {
-  return `Hello, ${name}!`;
-}
+export {
+  apiGetAuthenticatedUserResponseSchema,
+  lightdashUserSchema,
+  type ApiGetAuthenticatedUserResponse,
+  type LightdashUser,
+} from './lightdash-user';
