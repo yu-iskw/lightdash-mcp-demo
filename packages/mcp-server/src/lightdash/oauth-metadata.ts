@@ -1,19 +1,10 @@
 import type { AppConfig } from '../config';
 
-export type OAuthProtectedResourceMetadata = {
-  resource: string;
-  authorization_servers: string[];
-  bearer_methods_supported: string[];
-  scopes_supported: string[];
-};
-
-export function getPublicBaseUrl(config: AppConfig): string {
+function getPublicBaseUrl(config: AppConfig): string {
   return config.MCP_PUBLIC_URL ?? `http://localhost:${String(config.MCP_SERVER_PORT)}`;
 }
 
-export function buildOAuthProtectedResourceMetadata(
-  config: AppConfig,
-): OAuthProtectedResourceMetadata {
+export function buildOAuthProtectedResourceMetadata(config: AppConfig) {
   const publicUrl = getPublicBaseUrl(config);
 
   return {

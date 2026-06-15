@@ -20,12 +20,10 @@ export class LightdashApiError extends Error {
   }
 }
 
-export type FetchFn = typeof fetch;
-
 export class LightdashClient {
   constructor(
     private readonly siteUrl: string,
-    private readonly fetchFn: FetchFn = fetch,
+    private readonly fetchFn: typeof fetch = fetch,
   ) {}
 
   async getAuthenticatedUser(accessToken: string): Promise<LightdashUser> {
