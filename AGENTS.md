@@ -128,4 +128,3 @@ When you want durable fixes (not one-off chat advice):
 - `LIGHTDASH_OAUTH_CLIENT_ID` and `LIGHTDASH_OAUTH_CLIENT_SECRET` are not used by MCP server runtime; OAuth is completed by MCP clients (e.g. Cursor), not by `curl`.
 - When using ngrok with Cursor, set `MCP_PUBLIC_URL` to the ngrok HTTPS origin (no trailing slash) and restart the server; if unset, `WWW-Authenticate` points at localhost and remote OAuth discovery fails.
 - `POST /mcp` without a bearer token returns HTTP 401 with a `WWW-Authenticate` header plus JSON `{ "error": "Unauthorized" }`; browser login happens on Lightdash, opened by the MCP client.
-- For this workspace, set `LIGHTDASH_URL=https://ubie.lightdash.cloud` (Ubie org dev tenant; `.env.example` uses a generic placeholder).
