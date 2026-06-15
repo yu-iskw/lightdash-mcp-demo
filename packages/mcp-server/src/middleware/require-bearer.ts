@@ -4,7 +4,6 @@ import type { AppConfig } from '../config';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { NextFunction, Request, Response } from 'express';
 
-
 export type AuthenticatedRequest = Request & { auth?: AuthInfo };
 
 function extractBearerToken(authorizationHeader: string | undefined): string | undefined {
@@ -23,10 +22,7 @@ export function createRequireBearerMiddleware(config: AppConfig) {
     const token = extractBearerToken(req.headers.authorization);
 
     if (!token) {
-      res.set(
-        'WWW-Authenticate',
-        `Bearer resource_metadata="${resourceMetadataUrl}"`,
-      );
+      res.set('WWW-Authenticate', `Bearer resource_metadata="${resourceMetadataUrl}"`);
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }

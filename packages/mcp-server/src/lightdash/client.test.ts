@@ -1,10 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  LightdashApiError,
-  LightdashAuthError,
-  LightdashClient,
-} from './client';
+import { LightdashApiError, LightdashAuthError, LightdashClient } from './client';
 
 describe('LightdashClient', () => {
   it('sends Authorization Bearer header', async () => {
@@ -60,8 +56,6 @@ describe('LightdashClient', () => {
 
     const client = new LightdashClient('https://app.lightdash.cloud', fetchFn);
 
-    await expect(client.getAuthenticatedUser('token')).rejects.toBeInstanceOf(
-      LightdashApiError,
-    );
+    await expect(client.getAuthenticatedUser('token')).rejects.toBeInstanceOf(LightdashApiError);
   });
 });

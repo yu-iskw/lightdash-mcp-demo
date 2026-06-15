@@ -2,10 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { loadConfig } from '../config';
 
-import {
-  createRequireBearerMiddleware,
-  type AuthenticatedRequest,
-} from './require-bearer';
+import { createRequireBearerMiddleware, type AuthenticatedRequest } from './require-bearer';
 
 import type { NextFunction, Response } from 'express';
 

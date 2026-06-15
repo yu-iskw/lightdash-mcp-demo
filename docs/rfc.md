@@ -2,7 +2,7 @@
 
 **Status:** Draft (experimental spike)
 **Author:** yu-iskw
-**Implementation repo:** [yu-iskw/lightdash-mcp-demo](https://github.com/yu-iskw/lightdash-mcp-demo)
+**Implementation repo:** `yu-iskw/lightdash-mcp-demo` (this repository)
 **Target Lightdash:** Hosted Cloud / staging
 **Lightdash reference:** [lightdash/lightdash](https://github.com/lightdash/lightdash)
 
@@ -37,21 +37,21 @@ The custom MCP server must act as a **token pass-through proxy**: it receives th
 
 ### Success Criteria
 
-| Criterion | Validation |
-|-----------|------------|
+| Criterion                               | Validation                                                                                |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- |
 | MCP client connects via ngrok HTTPS URL | Cursor (or similar) lists `lightdash-mcp-demo` server and completes OAuth when challenged |
-| Tool returns real user profile | `get_authenticated_user` output matches `GET /api/v1/user` for the same bearer token |
-| No shared service identity | Each user sees their own `userUuid`, `email`, `role` � not an admin PAT |
-| Isolated codebase | All server code lives in `lightdash-mcp-demo`, not the Lightdash monorepo |
+| Tool returns real user profile          | `get_authenticated_user` output matches `GET /api/v1/user` for the same bearer token      |
+| No shared service identity              | Each user sees their own `userUuid`, `email`, `role` � not an admin PAT                   |
+| Isolated codebase                       | All server code lives in `lightdash-mcp-demo`, not the Lightdash monorepo                 |
 
 ### Context & Impact
 
 Lightdash implements **two distinct OAuth directions**:
 
-| Direction | Meaning | Relevant to this RFC? |
-|-----------|---------|----------------------|
-| **Lightdash as OAuth provider** | External as authenticate users against Lightdash; tokens are `ldapp_�` | **Yes** � OAuth Applications UI |
-| **Lightdash as MCP/OAuth client** | Lightdash AI agents connect outbound to *your* MCP server | **No** � different feature (`ai_mcp_server`) |
+| Direction                         | Meaning                                                                | Relevant to this RFC?                        |
+| --------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------- |
+| **Lightdash as OAuth provider**   | External as authenticate users against Lightdash; tokens are `ldapp_�` | **Yes** � OAuth Applications UI              |
+| **Lightdash as MCP/OAuth client** | Lightdash AI agents connect outbound to _your_ MCP server              | **No** � different feature (`ai_mcp_server`) |
 
 This spike uses only the first direction.
 
@@ -59,13 +59,13 @@ This spike uses only the first direction.
 
 ## 2. Evaluation Criteria
 
-| Criterion | Definition |
-|-----------|------------|
+| Criterion               | Definition                                                                        |
+| ----------------------- | --------------------------------------------------------------------------------- |
 | **Permission fidelity** | Tool calls execute with the authenticated user's CASL abilities via Lightdash API |
-| **Security** | No long-lived shared secrets; per-user OAuth tokens; HTTPS via ngrok |
-| **Time-to-first-demo** | Minimal scope: one tool, one API endpoint |
-| **Spec compliance** | MCP Streamable HTTP transport + OAuth protected-resource metadata (RFC 9728) |
-| **Maintainability** | Standalone demo repo; easy to discard or evolve independently |
+| **Security**            | No long-lived shared secrets; per-user OAuth tokens; HTTPS via ngrok              |
+| **Time-to-first-demo**  | Minimal scope: one tool, one API endpoint                                         |
+| **Spec compliance**     | MCP Streamable HTTP transport + OAuth protected-resource metadata (RFC 9728)      |
+| **Maintainability**     | Standalone demo repo; easy to discard or evolve independently                     |
 
 ---
 
@@ -110,21 +110,21 @@ This spike uses only the first direction.
 
 ## 4. Scoring Matrix
 
-| Approach | Permission fidelity | Security | Time-to-demo | Spec compliance | Maintainability | **Average** |
-|:---------|:------------------:|:--------:|:------------:|:---------------:|:---------------:|:-----------:|
-| **1. OAuth-delegated proxy** | 95 | 85 | 75 | 85 | 80 | **84** |
-| **2. Extend official MCP** | 100 | 95 | 50 | 100 | 90 | **87** |
-| **3. AI Agent external MCP** | 80 | 70 | 55 | 70 | 55 | **66** |
-| **hared bearer** | 15 | 40 | 95 | 60 | 50 | **52** |
-| **5. Official MCP only** | 100 | 95 | 90 | 100 | 95 | **96** |
+| Approach                     | Permission fidelity | Security | Time-to-demo | Spec compliance | Maintainability | **Average** |
+| :--------------------------- | :-----------------: | :------: | :----------: | :-------------: | :-------------: | :---------: |
+| **1. OAuth-delegated proxy** |         95          |    85    |      75      |       85        |       80        |   **84**    |
+| **2. Extend official MCP**   |         100         |    95    |      50      |       100       |       90        |   **87**    |
+| **3. AI Agent external MCP** |         80          |    70    |      55      |       70        |       55        |   **66**    |
+| **hared bearer**             |         15          |    40    |      95      |       60        |       50        |   **52**    |
+| **5. Official MCP only**     |         100         |    95    |      90      |       100       |       95        |   **96**    |
 
-*Scores 0�100. Approach 5 scores highest for production simplicity; Approach 1 is selected because the explicit goal is a **custom tool experiment** outside the monorepo.*
+_Scores 0�100. Approach 5 scores highest for production simplicity; Approach 1 is selected because the explicit goal is a **custom tool experiment** outside the monorepo._
 
 ---
 
 ## 5. Recommendation
 
-Implement **Approach 1** as a spike in [yu-iskw/lightdash-mcp-demo](https://github.com/yu-iskw/lightdash-mcp-demo):
+Implement **Approach 1** as a spike in this repository (`yu-iskw/lightdash-mcp-demo`):
 
 - **Lightdash Cloud** is the OAuth authorization server.
 - **Demo MCP server** runs locally, exposed via **ngrok**.
@@ -139,7 +139,7 @@ Phased delivery is defined in [Section 11](#11-implementation-phases).
 
 ### 6.1 Component diagram
 
-```
+```text
 ???????????????     HTTPS      ????????????     HTTP      ?????????????? ? Demo MCP Server  ?
 ?  (Cursor)   ?                ?  tunnel  ?               ?  localhost:3100  ?
 ???????????????                ????????????               ????????????????????
@@ -164,13 +164,13 @@ Phased delivery is defined in [Section 11](#11-implementation-phases).
 
 ### 6.3 Auth model
 
-| Principle | Detail |
-|-----------|--------|
-| **Token source** | Lightdash OAuth access token (`ldapp_` prefix per `AuthTokenPrefix.OAUTH_APP`) |
-| **Token storage (demo server)** | **None** � token lives in MCP client session only; server reads per-request `Authorization` header |
-| **Permission enforcement** | Lightdash REST API + CASL on `SessionUser` resolved from token |
-| **Scopes requested** | `read` (minimum for `GET /api/v1/user`); optionally `mcp:read` for MCP client parity |
-| **Scope enforcement today** | OAuth scopes are **mostly informational**  REST; CASL is authoritative (see Lightdash source notes below) |
+| Principle                       | Detail                                                                                                   |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Token source**                | Lightdash OAuth access token (`ldapp_` prefix per `AuthTokenPrefix.OAUTH_APP`)                           |
+| **Token storage (demo server)** | **None** � token lives in MCP client session only; server reads per-request `Authorization` header       |
+| **Permission enforcement**      | Lightdash REST API + CASL on `SessionUser` resolved from token                                           |
+| **Scopes requested**            | `read` (minimum for `GET /api/v1/user`); optionally `mcp:read` for MCP client parity                     |
+| **Scope enforcement today**     | OAuth scopes are **mostly informational** REST; CASL is authoritative (see Lightdash source notes below) |
 
 ### 6.4 Lightdash source reference (behaviors we rely on)
 
@@ -349,11 +349,11 @@ MCP endpoint for clients: `{MCP_PUBLIC_URL}/mcp`
 
 OAuth redirect URIs registered in Lightdash must **exactly match** what the OAuth client uses during authorization code exchange.
 
-| Cpical redirect URI | Notes |
-|--------|---------------------|-------|
-| **Manual / curl spike (Phase 2)** | `http://localhost:PORT/callback` | Register in OAuth app; run local callback server |
-| **Cursor MCP OAuth** | Cursor-specific callback (varies by version) | Inspect Cursor MCP OAuth logs or network tab during first connect |
-| **Dynamic registration** | `POST /api/v1/oauth/register` (unauthenticated) | Creates `mcp-�` client IDs; used by some MCP clients � **out of scope for Phase 1** |
+| Cpical redirect URI               | Notes                                           |
+| --------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **Manual / curl spike (Phase 2)** | `http://localhost:PORT/callback`                | Register in OAuth app; run local callback server                                    |
+| **Cursor MCP OAuth**              | Cursor-specific callback (varies by version)    | Inspect Cursor MCP OAuth logs or network tab during first connect                   |
+| **Dynamic registration**          | `POST /api/v1/oauth/register` (unauthenticated) | Creates `mcp-�` client IDs; used by some MCP clients � **out of scope for Phase 1** |
 
 **De-risking order:**
 
@@ -365,15 +365,15 @@ OAuth redirect URIs registered in Lightdash must **exactly match** what the OAut
 
 Create `.env.local` in `lightdash-mcp-demo` (gitignored):
 
-| Variable | Required | Example | Purpose |
-|----------|----------|---------|---------|
-| `LIGHTDASH_URL` | Yes | `https://app.lightdash.cloud` | Lightdash server URL (no trailing slash) |
-| `LIGHTDASH_OAUTH_CLIENT_| Yes | `oauth-xxxxxxxx` | From OAuth application registration |
-| `LIGHTDASH_OAUTH_CLIENT_SECRET` | Yes | `(secret)` | From registration (one-time display) |
-| `MCP_SERVER_PORT` | No | `3100` | Local HTTP port |
-| `MCP_PUBLIC_URL` | Phase 3+ | `https://abc123.ngrok-free.app` | Public HTTPS origin for OAuth resource metadata |
-| `OAUTH_REDIRECT_URI` | Phase 2+ | `http://localhost:3847/callback` | Must match registered redirect URI |
-| `LIGHTDASH_ACCESS_TOKEN` | Phase 2 only | `ldapp_�` | Manual token for curl testing before OAuth challenge works |
+| Variable                        | Required     | Example                          | Purpose                                                    |
+| ------------------------------- | ------------ | -------------------------------- | ---------------------------------------------------------- |
+| `LIGHTDASH_URL`                 | Yes          | `https://app.lightdash.cloud`    | Lightdash server URL (no trailing slash)                   |
+| `LIGHTDASH*OAUTH_CLIENT*        | Yes          | `oauth-xxxxxxxx`                 | From OAuth application registration                        |
+| `LIGHTDASH_OAUTH_CLIENT_SECRET` | Yes          | `(secret)`                       | From registration (one-time display)                       |
+| `MCP_SERVER_PORT`               | No           | `3100`                           | Local HTTP port                                            |
+| `MCP_PUBLIC_URL`                | Phase 3+     | `https://abc123.ngrok-free.app`  | Public HTTPS origin for OAuth resource metadata            |
+| `OAUTH_REDIRECT_URI`            | Phase 2+     | `http://localhost:3847/callback` | Must match registered redirect URI                         |
+| `LIGHTDASH_ACCESS_TOKEN`        | Phase 2 only | `ldapp_�`                        | Manual token for curl testing before OAuth challenge works |
 
 Example `.env.local`:
 
@@ -417,14 +417,14 @@ Token lifetime defaults: **1 hour** access, **14 days** refresh (`AUTH_OAUTH_SER
 
 ### 8.1 Repository context
 
-Current state of [yu-iskw/lightdash-mcp-demo](https://github.com/yu-iskw/lightdash-mcp-demo):
+Current state of this repository (`yu-iskw/lightdash-mcp-demo`):
 
 - pnpm monorepo template (Node ? 24, pnpm 11)
 - Existing package: `packages/common` (`@typescript-template/common`CP server package yet � to be added per layout below
 
 ### 8.2 Proposed package layout
 
-```
+```text
 lightdash-mcp-demo/
 ??? packages/
 ?   ??? common/                    # existing � add Lightdash API types
@@ -447,12 +447,12 @@ lightdash-mcp-demo/
 
 ### 8.3 Dependencies (implementation)
 
-| Package | Version guidance | Purpose |
-|---------|------------------|---------|
+| Package                     | Version guidance                   | Purpose                                      |
+| --------------------------- | ---------------------------------- | -------------------------------------------- |
 | `@modelcontextprotocol/sdk` | `1.29.0` (match Lightdash backend) | `McpServer`, `StreamableHTTPServerTransport` |
-| `express` | latest compatible | HTTP server |
-| `zod` | latest | env + response validation |
-| `typescript` | ^5.9 | already in template |
+| `express`                   | latest compatible                  | HTTP server                                  |
+| `zod`                       | latest                             | env + response validation                    |
+| `typescript`                | ^5.9                               | already in template                          |
 
 Reference pattern in Lightdash tests:
 
@@ -471,12 +471,12 @@ Reference pattern in Lightdash tests:
 
 ### 8.4 HTTP routes
 
-| Method | Path | Auth | Purpose |
-|--------|------|------|---------|
-| `GET` | `/health` | None | Liveness (`{ "status": "ok" }`) |
-| `GET` | `/.well-known/oauth-protected-resource` | None | MCP OAuth resource metadata |
-| `POST` | `/mcp` | Bearer required | MCP Streamable HTTP (JSON-RPC) |
-| `GET` | `/mcp` | � | `405 Method not allowed` (match Lightdash test server) |
+| Method | Path                                    | Auth            | Purpose                                                |
+| ------ | --------------------------------------- | --------------- | ------------------------------------------------------ |
+| `GET`  | `/health`                               | None            | Liveness (`{ "status": "ok" }`)                        |
+| `GET`  | `/.well-known/oauth-protected-resource` | None            | MCP OAuth resource metadata                            |
+| `POST` | `/mcp`                                  | Bearer required | MCP Streamable HTTP (JSON-RPC)                         |
+| `GET`  | `/mcp`                                  | �               | `405 Method not allowed` (match Lightdash test server) |
 
 #### Protected resource metadata (demo server)
 
@@ -493,7 +493,7 @@ MCP clients discover Lightdash as the authorization server; tokens issued by Lig
 
 #### 401 response (unauthenticated MCP request)
 
-```
+```http
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer resource_metadata="https://<MCP_PUBLIC_URL>/.well-known/oauth-protected-resource"
 Content-Type: application/json
@@ -503,18 +503,18 @@ Content-Type: application/json
 
 ### 8.5 Tool contract: `get_autnticated_user`
 
-| Field | Value |
-|-------|-------|
-| **Name** | `get_authenticated_user` |
-| **Title** | Get authenticated user |
-| **Description** | Returns the Lightdash profile for the OAuth-authenticated user who invoked this tool. |
-| **Input schema** | `{}` (no properties) |
-| **Output** | MCP `content: [{ type: "text", text: "<pretty JSON>" }]` |
-| **Annotations** | `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false` |
+| Field            | Value                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| **Name**         | `get_authenticated_user`                                                              |
+| **Title**        | Get authenticated user                                                                |
+| **Description**  | Returns the Lightdash profile for the OAuth-authenticated user who invoked this tool. |
+| **Input schema** | `{}` (no properties)                                                                  |
+| **Output**       | MCP `content: [{ type: "text", text: "<pretty JSON>" }]`                              |
+| **Annotations**  | `readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`                |
 
 #### Handler pseudocode
 
-```
+```text
 on get_authenticated_user(args, extra):
   token = extra.authInfo.token
   if not token:
@@ -583,12 +583,12 @@ Replace `<ngrok-host>` with the current ngrok forwarding domain.
 
 ### 9.3 Known limitations
 
-| Limitation | Mitigation |
-|------------|------------|
-| ngrok URL rotation | Update `mcp.json` and `MCP_PUBLIC_URL`; re-register redirect URI if needed |
-| Access token expiry (1h default) | Cursor should refresh via `refresh_token`; demo server does not store refresh tokens |
-| OAuth client secret in env | Never commit; use `.env.local` only |
-| `/oauth/introspect` requires session | Do not use for server-side validation � forward token to `/api/v1/user` instead |
+| Limitation                                | Mitigation                                                                                         |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| ngrok URL rotation                        | Update `mcp.json` and `MCP_PUBLIC_URL`; re-register redirect URI if needed                         |
+| Access token expiry (1h default)          | Cursor should refresh via `refresh_token`; demo server does not store refresh tokens               |
+| OAuth client secret in env                | Never commit; use `.env.local` only                                                                |
+| `/oauth/introspect` requires session      | Do not use for server-side validation � forward token to `/api/v1/user` instead                    |
 | Cursor OAuth callback URL unknown upfront | Complete Phase 2 manual OAuth first; add Cursor callback URI to Lightdash OAuth app before Phase 4 |
 
 ---
@@ -613,25 +613,25 @@ Replace `<ngrok-host>` with the current ngrok forwarding domain.
 
 ### Risks
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| Leaked `client_secret` | High | `.gitignore` `.env.local`; rotate client in Lightdash UI |
-| Leaked `ldapp_` token in logs | High | Never log `Authorization` header; redact in error messages |
-| Over-broad OAuth scopes | Medium | Request `read` only for this tool |
-| ngrok exposes local server to internet | Medium | Spike only; stop tunnel when not testing |
-| OAuth scopes not enforced on REST | Low (documented) | Rely onL; re-evaluate when Lightdash enforces scopes |
+| Risk                                   | Severity         | Mitigation                                                 |
+| -------------------------------------- | ---------------- | ---------------------------------------------------------- |
+| Leaked `client_secret`                 | High             | `.gitignore` `.env.local`; rotate client in Lightdash UI   |
+| Leaked `ldapp_` token in logs          | High             | Never log `Authorization` header; redact in error messages |
+| Over-broad OAuth scopes                | Medium           | Request `read` only for this tool                          |
+| ngrok exposes local server to internet | Medium           | Spike only; stop tunnel when not testing                   |
+| OAuth scopes not enforced on REST      | Low (documented) | Rely onL; re-evaluate when Lightdash enforces scopes       |
 
 ---
 
 ## 11. Implementation Phases
 
-| Phase | Goal | Exit criteria |
-|-------|------|---------------|
-| **0** | RFC approved | This document reviewed |
-| **1** | Scaffold `packages/mcp-server` | `pnpm dev` ? `GET /health` returns 200 |
-| **2** | MCP + tool with manual token | `curl` POST `/mcp` with `LIGHTDASH_ACCESS_TOKEN` env ? tool returns user JSON |
-| **3** | OAuth metadata + 401 challenge | Unauthenticated request returns `WWW-Authenticate`; metadata lists Lightdash |
-| **4** | Cursor + ngrok + Cloud E2E | `get_authenticated_user` in Cursor returns real Cloud user |
+| Phase | Goal                           | Exit criteria                                                                 |
+| ----- | ------------------------------ | ----------------------------------------------------------------------------- |
+| **0** | RFC approved                   | This document reviewed                                                        |
+| **1** | Scaffold `packages/mcp-server` | `pnpm dev` ? `GET /health` returns 200                                        |
+| **2** | MCP + tool with manual token   | `curl` POST `/mcp` with `LIGHTDASH_ACCESS_TOKEN` env ? tool returns user JSON |
+| **3** | OAuth metadata + 401 challenge | Unauthenticated request returns `WWW-Authenticate`; metadata lists Lightdash  |
+| **4** | Cursor + ngrok + Cloud E2E     | `get_authenticated_user` in Cursor returns real Cloud user                    |
 
 ### Phase 1 tasks (implementation)
 
@@ -665,12 +665,12 @@ Replace `<ngrok-host>` with the current ngrok forwarding domain.
 
 ### Unit tests (`packages/mcp-server`)
 
-| Test | Assertion |
-|------|-----------|
-| `LightdashClient.getAuthenticatedUser` sends `Authorization: Bearer <token>` | Header present |
-| `LightdashClient` handles 401 | Throws typed error |
-| `config.ts` rejects missing `LIGHTDASH_URL` | Zod validation error |
-| `oauthMetadata` response shape | `authorization_servers[0] === LIGHTDASH_URL` |
+| Test                                                                         | Assertion                                    |
+| ---------------------------------------------------------------------------- | -------------------------------------------- |
+| `LightdashClient.getAuthenticatedUser` sends `Authorization: Bearer <token>` | Header present                               |
+| `LightdashClient` handles 401                                                | Throws typed error                           |
+| `config.ts` rejects missing `LIGHTDASH_URL`                                  | Zod validation error                         |
+| `oauthMetadata` response shape                                               | `authorization_servers[0] === LIGHTDASH_URL` |
 
 Use Vitest (already in template). Mock `fetch` � no real Cloud calls in unit tests.
 
@@ -700,12 +700,12 @@ curl -s -H "Authorization: Bearer $TOKEN" "$SITE/api/v1/user" > /tmp/direct.json
 
 ## Appendix A: Glossary
 
-| Term | Meaning |
-|------|---------|
-| **OAuth Application** | Org-registered OAuth client in Lightdash Settings |
-| **ldapp_** | Prefix for Lightdash OAuth access tokens |
-| **CASL** | Lightdash authorization library; enforces role-based abilities |
-| **Streamable HTTP** | MCP transport over HTTP POST (replaces legacy SSE-only) |
+| Term                            | Meaning                                                                      |
+| ------------------------------- | ---------------------------------------------------------------------------- |
+| **OAuth Application**           | Org-registered OAuth client in Lightdash Settings                            |
+| **ldapp\_**                     | Prefix for Lightdash OAuth access tokens                                     |
+| **CASL**                        | Lightdash authorization library; enforces role-based abilities               |
+| **Streamable HTTP**             | MCP transport over HTTP POST (replaces legacy SSE-only)                      |
 | **Protected resource metadata** | RFC 9728 JSON document telling MCP clients which authorization server to use |
 
 ## Appendix B: Related Lightdash docs
@@ -716,4 +716,4 @@ curl -s -H "Authorization: Bearer $TOKEN" "$SITE/api/v1/user" > /tmp/direct.json
 
 ---
 
-*End of RFC.*
+_End of RFC._

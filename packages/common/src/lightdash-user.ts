@@ -18,6 +18,4 @@ export const apiGetAuthenticatedUserResponseSchema = z.object({
 });
 
 export type LightdashUser = z.infer<typeof lightdashUserSchema>;
-export type ApiGetAuthenticatedUserResponse = z.infer<
-  typeof apiGetAuthenticatedUserResponseSchema
->;
+export type ApiGetAuthenticatedUserResponse = z.infer<typeof apiGetAuthenticatedUserResponseSchema>;

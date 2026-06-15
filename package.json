@@ -26,6 +26,7 @@
     "knip": "knip",
     "codeql:local": "bash dev/codeql.sh",
     "test": "vitest run",
+    "postinstall": "pnpm --filter @lightdash-mcp-demo/common build",
     "coverage": "vitest run --coverage",
     "coverage:watch": "vitest --coverage"
   },

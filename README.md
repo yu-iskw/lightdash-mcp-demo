@@ -45,14 +45,14 @@ With a personal access token or OAuth access token in `.env.local`:
 
 Copy [`.env.example`](.env.example) to `.env.local`. The server loads `.env.local` then `.env` (see [`packages/mcp-server/src/config.ts`](packages/mcp-server/src/config.ts)).
 
-| Variable | Required | Description |
-| -------- | -------- | ----------- |
-| `LIGHTDASH_URL` | Yes | Lightdash server URL, e.g. `https://app.lightdash.cloud` (no trailing slash). Same as [Lightdash CLI](https://docs.lightdash.com/references/lightdash-cli#environment-variables). |
-| `LIGHTDASH_OAUTH_CLIENT_ID` | For OAuth registration docs / future use | OAuth application client ID from Lightdash Settings |
-| `LIGHTDASH_OAUTH_CLIENT_SECRET` | For OAuth registration docs / future use | OAuth application secret (keep out of git) |
-| `MCP_SERVER_PORT` | No (default `3100`) | Local HTTP port for the MCP server |
-| `MCP_PUBLIC_URL` | Yes for Cursor + ngrok | Public HTTPS base URL clients use (ngrok URL without trailing slash) |
-| `LIGHTDASH_ACCESS_TOKEN` | Manual tests only | Bearer token for [`dev/call-mcp-tool.sh`](dev/call-mcp-tool.sh); not used by the server in normal MCP flows |
+| Variable                        | Required                                 | Description                                                                                                                                                                       |
+| ------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `LIGHTDASH_URL`                 | Yes                                      | Lightdash server URL, e.g. `https://app.lightdash.cloud` (no trailing slash). Same as [Lightdash CLI](https://docs.lightdash.com/references/lightdash-cli#environment-variables). |
+| `LIGHTDASH_OAUTH_CLIENT_ID`     | For OAuth registration docs / future use | OAuth application client ID from Lightdash Settings                                                                                                                               |
+| `LIGHTDASH_OAUTH_CLIENT_SECRET` | For OAuth registration docs / future use | OAuth application secret (keep out of git)                                                                                                                                        |
+| `MCP_SERVER_PORT`               | No (default `3100`)                      | Local HTTP port for the MCP server                                                                                                                                                |
+| `MCP_PUBLIC_URL`                | Yes for Cursor + ngrok                   | Public HTTPS base URL clients use (ngrok URL without trailing slash)                                                                                                              |
+| `LIGHTDASH_ACCESS_TOKEN`        | Manual tests only                        | Bearer token for [`dev/call-mcp-tool.sh`](dev/call-mcp-tool.sh); not used by the server in normal MCP flows                                                                       |
 
 The demo server **does not persist tokens**. Tokens are supplied per request by the MCP client in the `Authorization` header.
 
@@ -106,12 +106,12 @@ User-scoped tokens must be sent as:
 
 ## HTTP routes
 
-| Method | Path | Auth | Purpose |
-| ------ | ---- | ---- | ------- |
-| `GET` | `/health` | No | Liveness probe (`{ "status": "ok" }`) |
-| `GET` | `/.well-known/oauth-protected-resource` | No | OAuth protected-resource metadata (RFC 9728) |
-| `GET` | `/mcp` | — | Returns **405** (Streamable HTTP uses POST) |
-| `POST` | `/mcp` | Bearer required | MCP Streamable HTTP (JSON-RPC); tools such as `get_authenticated_user` |
+| Method | Path                                    | Auth            | Purpose                                                                |
+| ------ | --------------------------------------- | --------------- | ---------------------------------------------------------------------- |
+| `GET`  | `/health`                               | No              | Liveness probe (`{ "status": "ok" }`)                                  |
+| `GET`  | `/.well-known/oauth-protected-resource` | No              | OAuth protected-resource metadata (RFC 9728)                           |
+| `GET`  | `/mcp`                                  | —               | Returns **405** (Streamable HTTP uses POST)                            |
+| `POST` | `/mcp`                                  | Bearer required | MCP Streamable HTTP (JSON-RPC); tools such as `get_authenticated_user` |
 
 Missing or invalid bearer on `POST /mcp` returns **401** with:
 
@@ -119,7 +119,7 @@ Missing or invalid bearer on `POST /mcp` returns **401** with:
 
 ## Project structure
 
-```
+```text
 lightdash-mcp-demo/
 ├── packages/
 │   ├── common/                 # Shared Zod schemas and types (Lightdash user)
@@ -140,16 +140,16 @@ lightdash-mcp-demo/
 
 ## Development commands
 
-| Command | Description |
-| ------- | ----------- |
-| `pnpm install` | Install workspace dependencies |
-| `pnpm dev` | Run MCP server with hot reload (`@lightdash-mcp-demo/server`) |
-| `pnpm build` | Compile all packages (`tsc`) |
-| `pnpm test` | Run Vitest across the workspace |
-| `pnpm lint:eslint` | ESLint |
-| `pnpm format:eslint` | ESLint with `--fix` |
-| `pnpm lint` | Trunk check (format, lint, security scanners) |
-| `pnpm format` | Trunk formatters |
+| Command              | Description                                                   |
+| -------------------- | ------------------------------------------------------------- |
+| `pnpm install`       | Install workspace dependencies                                |
+| `pnpm dev`           | Run MCP server with hot reload (`@lightdash-mcp-demo/server`) |
+| `pnpm build`         | Compile all packages (`tsc`)                                  |
+| `pnpm test`          | Run Vitest across the workspace                               |
+| `pnpm lint:eslint`   | ESLint                                                        |
+| `pnpm format:eslint` | ESLint with `--fix`                                           |
+| `pnpm lint`          | Trunk check (format, lint, security scanners)                 |
+| `pnpm format`        | Trunk formatters                                              |
 
 Production start (after build):
 
