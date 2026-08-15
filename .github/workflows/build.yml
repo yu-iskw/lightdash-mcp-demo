@@ -57,7 +57,6 @@ jobs:
       - name: Find unused code (Knip)
         run: pnpm knip
       - name: Trunk Check
-        if: github.event_name != 'push'
         uses: trunk-io/trunk-action@75699af9e26881e564e9d832ef7dc3af25ec031b # ratchet:trunk-io/trunk-action@v1
         with:
           setup-deps: true
